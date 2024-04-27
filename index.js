@@ -5,17 +5,16 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 app.use(cors({
-  origin:["http://localhost:5173","https://wilds-tour.web.app"]
+  origin:["http://localhost:5173","https://wilds-tour.web.app","https://wilds-tour-server.vercel.app"]
 }))
 app.use(express.json())
 
-// touristsSpots
-// O8Q8lcnod73OVBi2
 
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
-// const uri = "mongodb+srv://touristsSpots:O8Q8lcnod73OVBi2@cluster0.i8hseoh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.i8hseoh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 console.log(uri)
@@ -40,6 +39,13 @@ async function run() {
         const cursor = spotsCollection.find()
         const result = await cursor.toArray()
         res.send(result)
+    })
+
+    app.get("/touristSpots/:id", async (req,res) => {
+      const id = req.params.id;
+      const cursor = { _id : new ObjectId(id)}
+      const result = await spotsCollection.findOne(cursor)
+      res.send(result)
     })
 
     app.post("/touristSpots", async(req,res) => {
@@ -71,9 +77,3 @@ app.listen(port, ()=> {
 
 // https://wilds-tour.web.app
 
-// git init
-// git add README.md
-// git commit -m "first commit"
-// git branch -M main
-// git remote add origin https://github.com/programming-hero-web-course-4/b9a10-server-side-Antor4q.git
-// git push -u origin main
