@@ -49,7 +49,7 @@ async function run() {
     })
 
     app.get("/myList/:email", async(req,res) => {
-      console.log(req.params.email)
+   
       const cursor = req.params.email
       const result = await spotsCollection.find({user_email : cursor}).toArray()
       res.send(result)
@@ -59,6 +59,28 @@ async function run() {
         const newSpot = req.body;
         const result = await spotsCollection.insertOne(newSpot)
         res.send(result)
+    })
+
+    app.put("/myList/:id",async(req,res)=>{
+     const id = req.params.id
+     const filter = {_id: new ObjectId(id)}
+     const options = { upsert : true}
+     const update = req.body;
+      const spot = {
+        $set: {
+          image : update.image,
+          tourists_spot_name : update.tourists_spot_name,
+          countryName : update.countryName,
+          location : update.location,
+          shortDescription : update.shortDescription,
+          average_cost : update.average_cost,
+          seasonality : update.seasonality,
+          travel_time : update.travel_time,
+          totalVisitorsPerYear : update.totalVisitorsPerYear
+        }
+      }
+      const result = await spotsCollection.updateOne(filter,spot,options)
+      res.send(result)
     })
 
     // Send a ping to confirm a successful connection
