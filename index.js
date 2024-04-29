@@ -34,11 +34,18 @@ async function run() {
     // await client.connect();
 
     const spotsCollection =  client.db("touristDB").collection("touristSpots")
+    const countryCollection =  client.db("touristDB").collection("countrys")
 
     app.get("/touristSpots", async(req,res) => {
         const cursor = spotsCollection.find()
         const result = await cursor.toArray()
         res.send(result)
+    })
+
+    app.get("/countrys", async(req,res) => {
+      const cursor = countryCollection.find()
+      const result = await cursor.toArray()
+      res.send(result)
     })
 
     app.get("/touristSpots/:id", async (req,res) => {
