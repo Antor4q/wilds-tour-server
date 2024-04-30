@@ -48,6 +48,12 @@ async function run() {
       res.send(result)
     })
 
+    app.get("/countryData/:countryName",async(req,res) => {
+        const cursor = req.params.countryName
+        const result = await spotsCollection.find({countryName : cursor}).toArray()
+        res.send(result)
+    })
+
     app.get("/touristSpots/:id", async (req,res) => {
       const id = req.params.id;
       const cursor = { _id : new ObjectId(id)}
